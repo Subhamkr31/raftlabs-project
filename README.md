@@ -1,42 +1,41 @@
-# Task Management API
+Here’s a combined README for both Task Management and Real-Time Chat Application projects:
 
-A modern task management system built with Node.js, TypeScript, GraphQL, MongoDB, and Redis.
+---
+
+# Task Management and Real-Time Chat Applications
+
+This repository contains two modern applications built with Node.js, TypeScript, GraphQL, MongoDB, Redis, and Socket.IO.
+
+1. **Task Management System**: A robust task management API that supports user authentication, task CRUD operations, and real-time updates with Redis caching for performance optimization.
+2. **Real-Time Chat Application**: A chat application with room-based messaging and real-time updates via Socket.IO, built with GraphQL and TypeScript.
 
 ## Features
 
-- 🔐 User authentication (JWT)
-- 👤 User management
-- ✅ Task CRUD operations
-- 🔄 Real-time updates
-- 📊 Task filtering and sorting
-- 🚀 Performance optimization with Redis caching
+### Task Management System
+
+- 🔐 **User Authentication**: Secure user login and signup using JWT.
+- 👤 **User Management**: CRUD operations for managing user accounts.
+- ✅ **Task CRUD Operations**: Create, read, update, and delete tasks.
+- 🔄 **Real-Time Updates**: Real-time task updates via WebSockets.
+- 📊 **Task Filtering and Sorting**: Filter and sort tasks based on status, priority, or other criteria.
+- 🚀 **Performance Optimization**: Caching with Redis to improve performance and reduce MongoDB load.
+
+### Real-Time Chat Application
+
+- 🗨️ **Real-Time Messaging**: Instant messaging with Socket.IO.
+- 📋 **GraphQL API**: GraphQL API for user and message management.
+- 🔐 **JWT Authentication**: Secure login and signup with JWT.
+- 🔒 **Room-Based Chat**: Multiple chat rooms to allow users to join specific discussions.
+- 📝 **TypeScript Support**: Fully typed codebase for both applications.
 
 ## Prerequisites
+
+Ensure the following are installed on your system:
 
 - Node.js (v14 or higher)
 - MongoDB
 - Redis
 - npm or yarn
 
-## Installation
-
-1. Create a `.env` file in the root directory with the following variables:
-
- MONGO_URI=mongodb://localhost:27017/task-1
-REDIS_URL=redis://127.0.0.1:6379
-JWT_SECRET=your_jwt_secret
-PORT=5000
-
-4. Start the development server:
-
-npm run dev
-
-
-src/
-├── config/ # Configuration files
-├── models/ # MongoDB models
-├── resolvers/ # GraphQL resolvers
-├── schemas/ # GraphQL type definitions
-├── middleware/ # Custom middleware
-├── utils/ # Utility functions
-└── index.ts # Application entry point
+## Getting Started
+ 
