@@ -1,0 +1,189 @@
+{
+  "info": {
+    "name": "Task Management API",
+    "description": "GraphQL API collection for Task Management system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation Register($input: RegisterInput!) {\\n  register(input: $input) {\\n    token\\n    user {\\n      id\\n      username\\n      createdAt\\n    }\\n  }\\n}\",\"variables\":{\"input\":{\"username\":\"testuser\",\"password\":\"password123\"}}}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation Login($input: LoginInput!) {\\n  login(input: $input) {\\n    token\\n    user {\\n      id\\n      username\\n    }\\n  }\\n}\",\"variables\":{\"input\":{\"username\":\"testuser\",\"password\":\"password123\"}}}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation CreateTask($input: CreateTaskInput!) {\\n  createTask(input: $input) {\\n    id\\n    title\\n    description\\n    status\\n    createdAt\\n    updatedAt\\n  }\\n}\",\"variables\":{\"input\":{\"title\":\"Test Task\",\"description\":\"Test Description\",\"status\":\"TODO\"}}}"
+            }
+          }
+        },
+        {
+          "name": "Get Tasks",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\":\"query GetTasks($filter: TaskFilterInput, $pagination: PaginationInput) {\\n  tasks(filter: $filter, pagination: $pagination) {\\n    items {\\n      id\\n      title\\n      description\\n      status\\n      createdAt\\n      updatedAt\\n    }\\n    totalCount\\n    hasMore\\n  }\\n}\",\"variables\":{\"filter\":{\"status\":\"TODO\"},\"pagination\":{\"page\":1,\"limit\":10}}}"
+            }
+          }
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation UpdateTask($id: ID!, $input: UpdateTaskInput!) {\\n  updateTask(id: $id, input: $input) {\\n    id\\n    title\\n    description\\n    status\\n    updatedAt\\n  }\\n}\",\"variables\":{\"id\":\"task_id\",\"input\":{\"status\":\"IN_PROGRESS\"}}}"
+            }
+          }
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation DeleteTask($id: ID!) {\\n  deleteTask(id: $id) {\\n    success\\n    message\\n  }\\n}\",\"variables\":{\"id\":\"task_id\"}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "your_jwt_token_here",
+      "type": "string"
+    }
+  ]
+} 

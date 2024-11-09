@@ -18,7 +18,24 @@ A modern task management system built with Node.js, TypeScript, GraphQL, MongoDB
 - Redis
 - npm or yarn
 
-## Installation
+## Development Setup
+
+### Using Docker (Recommended)
+
+1. Install Docker and Docker Compose on your machine
+2. Start the services:
+
+```bash
+docker-compose up -d
+```
+
+This will start:
+- MongoDB (localhost:27017)
+- Redis (localhost:6379)
+- Mongo Express (UI) (http://localhost:8081)
+- Redis Commander (UI) (http://localhost:8082)
+
+### Environment Variables
 
 1. Create a `.env` file in the root directory with the following variables:
 
