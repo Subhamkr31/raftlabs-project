@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Real-Time Chat API",
-    "description": "API collection for Real-Time Chat Application",
+    "description": "GraphQL API collection for Real-Time Chat Application",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -23,50 +23,33 @@
               "path": ["graphql"]
             },
             "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "mutation Login($username: String!, $password: String!) {\n  login(username: $username, password: $password) {\n    token\n    user {\n      id\n      username\n    }\n  }\n}",
-                "variables": {
-                  "username": "testuser",
-                  "password": "password123"
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation($username: String!, $password: String!) { login(username: $username, password: $password) }\",\"variables\":{\"username\":\"testuser\",\"password\":\"testpassword\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
                 }
               }
-            }
-          }
+            },
+            "description": "Authenticate user and get JWT token"
+          },
+          "response": []
         }
       ]
     },
     {
-      "name": "Rooms",
+      "name": "Room Operations",
       "item": [
-        {
-          "name": "Get All Rooms",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/graphql",
-              "path": ["graphql"]
-            },
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query GetRooms {\n  rooms {\n    id\n    name\n    participants {\n      id\n      username\n    }\n  }\n}"
-              }
-            }
-          }
-        },
         {
           "name": "Join Room",
           "request": {
             "method": "POST",
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
                 "key": "Authorization",
                 "value": "Bearer {{authToken}}"
               }
@@ -76,15 +59,48 @@
               "path": ["graphql"]
             },
             "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "mutation JoinRoom($roomId: String!) {\n  joinRoom(roomId: $roomId) {\n    id\n    name\n    participants {\n      id\n      username\n    }\n  }\n}",
-                "variables": {
-                  "roomId": "room-123"
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation JoinRoom($roomId: ID!) { joinRoom(roomId: $roomId) { id name participants { id username } } }\",\"variables\":{\"roomId\":\"1\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
                 }
               }
-            }
-          }
+            },
+            "description": "Join a chat room"
+          },
+          "response": []
+        },
+        {
+          "name": "Leave Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "path": ["graphql"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation LeaveRoom($roomId: ID!) { leaveRoom(roomId: $roomId) }\",\"variables\":{\"roomId\":\"1\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Leave a chat room"
+          },
+          "response": []
         }
       ]
     },
@@ -92,36 +108,15 @@
       "name": "Messages",
       "item": [
         {
-          "name": "Get Room Messages",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/graphql",
-              "path": ["graphql"]
-            },
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query GetMessages($roomId: String!) {\n  messages(roomId: $roomId) {\n    id\n    content\n    sender {\n      id\n      username\n    }\n    roomId\n  }\n}",
-                "variables": {
-                  "roomId": "room-123"
-                }
-              }
-            }
-          }
-        },
-        {
           "name": "Send Message",
           "request": {
             "method": "POST",
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
                 "key": "Authorization",
                 "value": "Bearer {{authToken}}"
               }
@@ -131,29 +126,22 @@
               "path": ["graphql"]
             },
             "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "mutation SendMessage($roomId: String!, $content: String!) {\n  sendMessage(roomId: $roomId, content: $content) {\n    id\n    content\n    sender {\n      id\n      username\n    }\n    roomId\n  }\n}",
-                "variables": {
-                  "roomId": "room-123",
-                  "content": "Hello, World!"
+              "mode": "raw",
+              "raw": "{\"query\":\"mutation SendMessage($roomId: ID!, $content: String!) { sendMessage(roomId: $roomId, content: $content) { id content sender { id username } roomId } }\",\"variables\":{\"roomId\":\"1\",\"content\":\"Hello, everyone!\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
                 }
               }
-            }
-          }
+            },
+            "description": "Send a message in a room"
+          },
+          "response": []
         }
       ]
     }
   ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    }
-  ],
+  "event": [],
   "variable": [
     {
       "key": "baseUrl",
@@ -162,7 +150,7 @@
     },
     {
       "key": "authToken",
-      "value": "{{authToken}}",
+      "value": "",
       "type": "string"
     }
   ]
