@@ -1,15 +1,15 @@
 {
   "info": {
-    "name": "Task Management API",
-    "description": "GraphQL API collection for Task Management system",
+    "name": "Task Management GraphQL API",
+    "description": "Collection of GraphQL APIs for user management system",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Authentication",
+      "name": "User Management",
       "item": [
         {
-          "name": "Register",
+          "name": "Register User",
           "request": {
             "method": "POST",
             "header": [
@@ -25,12 +25,38 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\"query\":\"mutation Register($input: RegisterInput!) {\\n  register(input: $input) {\\n    token\\n    user {\\n      id\\n      username\\n      createdAt\\n    }\\n  }\\n}\",\"variables\":{\"input\":{\"username\":\"testuser\",\"password\":\"password123\"}}}"
+              "raw": "{\"query\":\"mutation($username: String!, $password: String!) { register(username: $username, password: $password) { user { _id username } } }\",\"variables\":{\"username\":\"newuser\",\"password\":\"password123\"}}"
+            },
+            "description": "Register a new user with username and password"
+          },
+          "response": [
+            {
+              "name": "Successful Registration",
+              "originalRequest": {
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"username\":\"newuser\",\"password\":\"password123\"}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": {
+                "data": {
+                  "register": {
+                    "user": {
+                      "_id": "user_id",
+                      "username": "newuser"
+                    }
+                  }
+                }
+              }
             }
-          }
+          ]
         },
         {
-          "name": "Login",
+          "name": "Login User",
           "request": {
             "method": "POST",
             "header": [
@@ -46,17 +72,39 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\"query\":\"mutation Login($input: LoginInput!) {\\n  login(input: $input) {\\n    token\\n    user {\\n      id\\n      username\\n    }\\n  }\\n}\",\"variables\":{\"input\":{\"username\":\"testuser\",\"password\":\"password123\"}}}"
+              "raw": "{\"query\":\"mutation($username: String!, $password: String!) { login(username: $username, password: $password) { token user { _id username } } }\",\"variables\":{\"username\":\"newuser\",\"password\":\"password123\"}}"
+            },
+            "description": "Login with username and password to get JWT token"
+          },
+          "response": [
+            {
+              "name": "Successful Login",
+              "originalRequest": {
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"username\":\"newuser\",\"password\":\"password123\"}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": {
+                "data": {
+                  "login": {
+                    "token": "jwt_token_here",
+                    "user": {
+                      "_id": "user_id",
+                      "username": "newuser"
+                    }
+                  }
+                }
+              }
             }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Tasks",
-      "item": [
+          ]
+        },
         {
-          "name": "Create Task",
+          "name": "Get Users",
           "request": {
             "method": "POST",
             "header": [
@@ -76,84 +124,39 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\"query\":\"mutation CreateTask($input: CreateTaskInput!) {\\n  createTask(input: $input) {\\n    id\\n    title\\n    description\\n    status\\n    createdAt\\n    updatedAt\\n  }\\n}\",\"variables\":{\"input\":{\"title\":\"Test Task\",\"description\":\"Test Description\",\"status\":\"TODO\"}}}"
-            }
-          }
-        },
-        {
-          "name": "Get Tasks",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/graphql",
-              "host": ["{{baseUrl}}"],
-              "path": ["graphql"]
+              "raw": "{\"query\":\"query { getUsers { _id username } }\"}"
             },
-            "body": {
-              "mode": "raw",
-              "raw": "{\"query\":\"query GetTasks($filter: TaskFilterInput, $pagination: PaginationInput) {\\n  tasks(filter: $filter, pagination: $pagination) {\\n    items {\\n      id\\n      title\\n      description\\n      status\\n      createdAt\\n      updatedAt\\n    }\\n    totalCount\\n    hasMore\\n  }\\n}\",\"variables\":{\"filter\":{\"status\":\"TODO\"},\"pagination\":{\"page\":1,\"limit\":10}}}"
-            }
-          }
-        },
-        {
-          "name": "Update Task",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
+            "description": "Get list of all users (requires authentication)"
+          },
+          "response": [
+            {
+              "name": "Successful Users Retrieval",
+              "originalRequest": {
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"query\":\"query { getUsers { _id username } }\"}"
+                }
               },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": {
+                "data": {
+                  "getUsers": [
+                    {
+                      "_id": "user_id_1",
+                      "username": "user1"
+                    },
+                    {
+                      "_id": "user_id_2",
+                      "username": "user2"
+                    }
+                  ]
+                }
               }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/graphql",
-              "host": ["{{baseUrl}}"],
-              "path": ["graphql"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\"query\":\"mutation UpdateTask($id: ID!, $input: UpdateTaskInput!) {\\n  updateTask(id: $id, input: $input) {\\n    id\\n    title\\n    description\\n    status\\n    updatedAt\\n  }\\n}\",\"variables\":{\"id\":\"task_id\",\"input\":{\"status\":\"IN_PROGRESS\"}}}"
             }
-          }
-        },
-        {
-          "name": "Delete Task",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/graphql",
-              "host": ["{{baseUrl}}"],
-              "path": ["graphql"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\"query\":\"mutation DeleteTask($id: ID!) {\\n  deleteTask(id: $id) {\\n    success\\n    message\\n  }\\n}\",\"variables\":{\"id\":\"task_id\"}}"
-            }
-          }
+          ]
         }
       ]
     }
@@ -161,13 +164,6 @@
   "event": [
     {
       "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    },
-    {
-      "listen": "test",
       "script": {
         "type": "text/javascript",
         "exec": [""]
